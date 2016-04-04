@@ -6,4 +6,4 @@ Feature: Hello World
   Scenario: Visit Main Page
     Given The system is running
     When a Visitor visits the landing page
-    Then a welcome message is returned to the Visitor
+    Then "Hello World" is returned to the Visitor
