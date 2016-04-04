@@ -1,5 +1,6 @@
 from behave import *
-from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.expected_conditions import staleness_of
 
 @given('at the login screen')
 def step_impl(ctx):
@@ -24,10 +25,27 @@ def step_impl(ctx):
     username.submit()
 
 
-@then(u'the system should identify the user')
+@then('the system should identify the user')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then the system should identify the user')
+    """
+    backend does its thing
+    """
+    pass
 
-@then(u'refer the user to the personalized main screen')
+@then('refer the user to the personalized main screen')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then refer the user to the personalized main screen')
+    with wait_for_page_load(context, 10):
+        driver = context.browser
+        title = driver.find_element_by_tag_name('title')
+        user_id = driver.find_element_by_id('user_id')
+        assert "Welcome" in title.text
+        assert "test" in user_id.text
+
+def wait_for_page_load(ctx, timeout=30):
+    driver = ctx.browser
+    old_page = driver.find_element_by_tag_name('html')
+    yield
+    WebDriverWait(driver, timeout).until(
+        staleness_of(old_page)
+    )
+
