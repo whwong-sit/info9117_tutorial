@@ -8,8 +8,8 @@ def step_impl(ctx):
     move selenium to login screen
     """
     driver = ctx.browser
-    driver.get('http://localhost:8000/login')
-    #assert "Login" in driver.page_source
+    driver.get(ctx.address + "/login")
+    assert "login" in driver.page_source
 
 
 @when('an existing user submits correct username and password')

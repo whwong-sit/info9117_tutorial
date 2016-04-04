@@ -4,14 +4,24 @@ app = Flask(__name__)
 host="localhost"
 port="5000"
 address="http://{host}:{port}".format(host=host,port=port)
+users = {"test":"test123", "superman":"batman", "batman":"batman"}
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
-@app.route('/login')
+@app.route('/login', methods=['GET','POST'])
 def login_page():
-    pass
+    if request.method ==  'POST':
+        username = request.form['username']
+        passwd = request.form['password']
+        db_passwd = users[username]
+        if passwd == db_passwd:
+            return "Success"
+        else:
+            return "Fail"
+    else:
+        return "login page here"
 
 def serve_forever():
     app.run(host, port)
